@@ -29,3 +29,22 @@ When running tests with `paths` set to only `test/test_a_test.dart`, both test f
 You can verify the bug by checking the test output:
 - If only `test_a_test.dart` runs: You'll see only "Test from test_a_test.dart"
 - If both run (bug): You'll see both "Test from test_a_test.dart" and "Test from test_b_test.dart" in the output
+
+## Additional Bug: Non-existent Paths
+
+The bug also occurs when specifying a non-existent test file path.
+
+### Steps to Reproduce
+1. Use the Dart MCP `run_tests` tool with:
+   - `roots`: `[{ "root": "file:///Users/petertrost/dev/dart_mcp_test_tool_bug" }]`
+   - `paths`: `["test/nonexistent_test.dart"]`
+
+2. Observe that all tests run despite the file not existing
+
+### Expected Behavior
+The tool should either:
+- Return an error indicating the file doesn't exist, OR
+- Run no tests (since the specified file doesn't exist)
+
+### Actual Behavior (Bug)
+All tests in the project run, and the tool reports "All tests passed!" as if the non-existent path was valid.
